@@ -23,7 +23,7 @@ const PaypalButton = ({ orderId, amount }: Props) => {
     );
   }
 
-  const createOrder = async (
+  /*   const createOrder = async (
     data: CreateOrderData,
     actions: CreateOrderActions
   ): Promise<string> => {
@@ -40,17 +40,26 @@ const PaypalButton = ({ orderId, amount }: Props) => {
       ],
     });
 
-    /* const { ok } = await setTransactionId(orderId, transactionId);
+    const { ok } = await setTransactionId(orderId, transactionId);
     if (!ok) {
       throw new Error('No se pudo actualizar la orden');
-    } */
+    }
 
     console.log('transactionId :', transactionId);
 
     return transactionId;
+  }; */
+
+  const createOrderRest = async () => {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+    });
+
+    const order = await res.json();
+    return order.id;
   };
 
-  return <PayPalButtons createOrder={createOrder} />;
+  return <PayPalButtons createOrder={createOrderRest} />;
 };
 
 export default PaypalButton;
