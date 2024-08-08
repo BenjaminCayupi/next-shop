@@ -42,8 +42,6 @@ export const getOrderById = async (id: string) => {
     if (order.userId !== session.user.id)
       throw new Error('No esta autorizado para ver esta orden');
 
-    console.log('order :', order);
-
     return {
       ok: true,
       order,
