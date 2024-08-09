@@ -1,8 +1,13 @@
 'use client';
 
-import { setTransactionId } from '@/actions';
+import { paypalCheckPayment, setTransactionId } from '@/actions';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-import { CreateOrderData, CreateOrderActions } from '@paypal/paypal-js';
+import {
+  CreateOrderData,
+  CreateOrderActions,
+  OnApproveData,
+  OnApproveActions,
+} from '@paypal/paypal-js';
 
 interface Props {
   orderId: string;
@@ -12,7 +17,7 @@ interface Props {
 const PaypalButton = ({ orderId, amount }: Props) => {
   const [{ isPending }] = usePayPalScriptReducer();
 
-  const roundedAmount = amount.toFixed(2).toString();
+  const roundedAmount = (Math.round(amount * 100) / 100).toString(); //123.23
 
   if (isPending) {
     return (
@@ -23,7 +28,7 @@ const PaypalButton = ({ orderId, amount }: Props) => {
     );
   }
 
-  /*   const createOrder = async (
+  const createOrder = async (
     data: CreateOrderData,
     actions: CreateOrderActions
   ): Promise<string> => {
@@ -48,18 +53,17 @@ const PaypalButton = ({ orderId, amount }: Props) => {
     console.log('transactionId :', transactionId);
 
     return transactionId;
-  }; */
-
-  const createOrderRest = async () => {
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-    });
-
-    const order = await res.json();
-    return order.id;
   };
 
-  return <PayPalButtons createOrder={createOrderRest} />;
+  const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+    console.log('OnApprove');
+    const details = await actions.order?.capture();
+    if (!details || !details.id) return;
+
+    await paypalCheckPayment(details.id);
+  };
+
+  return <PayPalButtons createOrder={createOrder} onApprove={onApprove} />;
 };
 
 export default PaypalButton;
