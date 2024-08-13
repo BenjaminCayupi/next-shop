@@ -21,7 +21,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
 
   return (
     <>
-      <Title title='Todas las ordenes' />
+      <Title title='Mantenedor ordenes' />
 
       <div className='mb-10'>
         <table className='min-w-full'>
