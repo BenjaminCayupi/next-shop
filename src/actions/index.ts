@@ -20,3 +20,6 @@ export { getPaginatedOrders } from './order/get-paginated-orders';
 
 export { setTransactionId } from './payments/set-transaction-id';
 export { paypalCheckPayment } from './payments/paypal-check-payment';
+
+export { getPaginatedUsers } from './users/get-paginated-users';
+export { changeUserRole } from './users/change-user-role';
