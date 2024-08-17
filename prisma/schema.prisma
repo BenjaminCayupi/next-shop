@@ -61,6 +61,8 @@ model Product {
   OrderItem    OrderItem[]
 
   @@index([gender])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model ProductImage {
