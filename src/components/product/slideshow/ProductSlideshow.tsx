@@ -13,7 +13,7 @@ import 'swiper/css/thumbs';
 
 import './styles.css';
 import { useState } from 'react';
-import Image from 'next/image';
+import { ProductImage } from '@/components';
 
 interface Props {
   title: string;
@@ -42,17 +42,28 @@ export const ProductSlideshow = ({ title, images, className }: Props) => {
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
         className='mySwiper2'
       >
-        {images.map((image) => (
-          <SwiperSlide key={image}>
-            <Image
-              src={`/products/${image}`}
+        {images.length ? (
+          images.map((image) => (
+            <SwiperSlide key={image}>
+              <ProductImage
+                src={image}
+                width={1024}
+                height={800}
+                alt={title}
+                className='rounded-lg object-fill'
+              />
+            </SwiperSlide>
+          ))
+        ) : (
+          <SwiperSlide>
+            <ProductImage
               width={1024}
               height={800}
               alt={title}
               className='rounded-lg object-fill'
             />
           </SwiperSlide>
-        ))}
+        )}
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
@@ -65,8 +76,8 @@ export const ProductSlideshow = ({ title, images, className }: Props) => {
       >
         {images.map((image) => (
           <SwiperSlide key={image}>
-            <Image
-              src={`/products/${image}`}
+            <ProductImage
+              src={image}
               width={300}
               height={300}
               alt={title}

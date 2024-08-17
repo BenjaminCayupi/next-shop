@@ -6,9 +6,17 @@ interface Props {
   height: number;
   alt: string;
   className?: React.StyleHTMLAttributes<HTMLImageElement>['className'];
+  style?: React.StyleHTMLAttributes<HTMLImageElement>['style'];
 }
 
-export const ProductImage = ({ src, width, height, alt, className }: Props) => {
+export const ProductImage = ({
+  src,
+  width,
+  height,
+  alt,
+  className,
+  style,
+}: Props) => {
   const newSrc = src
     ? src.startsWith('http')
       ? src
@@ -21,6 +29,7 @@ export const ProductImage = ({ src, width, height, alt, className }: Props) => {
       height={height}
       alt={alt}
       className={className ? className : 'rounded object-cover'}
+      style={style}
     />
   );
 };
