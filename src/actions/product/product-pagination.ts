@@ -23,6 +23,7 @@ export const getPaginatedProductsWithImages = async ({
     /* 1 Obtener los productos y cantidad total de paginas (llamados a bd) */
     const { products, totalCount } = await Promise.all([
       prisma.product.findMany({
+        orderBy: { createdAt: 'desc' },
         take: take,
         skip: (page - 1) * take,
         where: { gender },
