@@ -4,7 +4,9 @@ import { createUpdateProduct } from '@/actions';
 import { Product, Category, ProductImage } from '@/interfaces';
 import clsx from 'clsx';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 interface Props {
   product: Partial<Product> & { ProductImage?: ProductImage[] };
@@ -28,6 +30,7 @@ interface FormInputs {
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -71,9 +74,27 @@ export const ProductForm = ({ product, categories }: Props) => {
     formData.append('gender', productToSave.gender);
     formData.append('categoryId', productToSave.categoryId.toString());
 
-    const { ok, message } = await createUpdateProduct(formData);
+    const {
+      ok,
+      message,
+      product: updatedProduct,
+    } = await createUpdateProduct(formData);
 
-    console.log('ok :', { ok, message });
+    if (!ok) {
+      toast.error(message ?? 'Error');
+      return;
+    }
+
+    toast.success(
+      `Producto ${
+        productToSave.slug === 'new' ? 'creado' : 'actualizado'
+      } con éxito.`,
+      {
+        duration: 3000,
+      }
+    );
+
+    router.replace(`/admin/product/${updatedProduct?.slug}`);
   };
 
   return (
