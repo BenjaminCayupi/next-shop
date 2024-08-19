@@ -1,4 +1,5 @@
 import { Footer, Sidebar, TopMenu } from '@/components';
+import { Toaster } from 'react-hot-toast';
 
 export default async function ShopLayout({
   children,
@@ -7,6 +8,7 @@ export default async function ShopLayout({
 }) {
   return (
     <main className='min-h-screen'>
+      <Toaster />
       <TopMenu />
       <Sidebar />
       <div className='px-0 sm:px-10'>{children}</div>
