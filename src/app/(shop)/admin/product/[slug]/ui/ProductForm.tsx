@@ -1,6 +1,6 @@
 'use client';
 
-import { createUpdateProduct } from '@/actions';
+import { createUpdateProduct, deleteProductImage } from '@/actions';
 import { ProductImage } from '@/components';
 import {
   Product,
@@ -104,13 +104,24 @@ export const ProductForm = ({ product, categories }: Props) => {
     toast.success(
       `Producto ${
         productToSave.slug === 'new' ? 'creado' : 'actualizado'
-      } con éxito.`,
-      {
-        duration: 3000,
-      }
+      } con éxito.`
     );
 
     router.replace(`/admin/product/${updatedProduct?.slug}`);
+  };
+
+  const deleteImage = async (imageId: number, imageUrl: string) => {
+    const loader = toast.loading('Cargando...');
+
+    const { ok, message } = await deleteProductImage(imageId, imageUrl);
+    toast.remove(loader);
+
+    if (!ok) {
+      toast.error(message ?? 'Error');
+      return;
+    }
+
+    toast.success('Imagen eliminada con éxito');
   };
 
   return (
@@ -180,7 +191,7 @@ export const ProductForm = ({ product, categories }: Props) => {
         </div>
 
         <div className='flex flex-col mb-2'>
-          <span>Categoria</span>
+          <span>Categoría</span>
           <select
             className='p-2 border rounded-md'
             {...register('categoryId', { required: true })}
@@ -251,6 +262,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                   <button
                     type='button'
                     className='btn-danger w-full rounded-b-xl'
+                    onClick={() => deleteImage(image.id, image.url)}
                   >
                     Eliminar
                   </button>
