@@ -257,7 +257,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                     src={image.url}
                     width={300}
                     height={300}
-                    className='rounded-t shadow-md'
+                    className='rounded-t shadow-md w-full'
                   />
                   <button
                     type='button'
