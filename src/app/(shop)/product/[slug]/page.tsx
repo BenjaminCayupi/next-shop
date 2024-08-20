@@ -32,12 +32,19 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || [];
 
+  const imageValidation = product?.ProductImage[0].url.startsWith('http')
+    ? product.images[0]
+    : `/products/${product?.images[0]}`;
+
   return {
     title: product?.title ?? 'Producto no encontrado',
     description: product?.description ?? '',
-    /* openGraph: {
-      images: [`/products/${product?.images[1]}`],
-    }, */
+    openGraph: {
+      title: product?.title ?? 'Producto no encontrado',
+      description: product?.description ?? '',
+      // images: [], // https://misitioweb.com/products/image.png
+      images: [imageValidation],
+    },
   };
 }
 
