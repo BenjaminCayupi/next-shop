@@ -91,9 +91,7 @@ export const createUpdateProduct = async (formData: FormData) => {
           throw new Error('Hubo un error al cargar las imagenes');
         }
 
-        console.log('images :', images);
-
-        await prisma.productImage.createMany({
+        await tx.productImage.createMany({
           data: images.map((image) => ({
             url: image!,
             productId: product.id,
@@ -113,6 +111,7 @@ export const createUpdateProduct = async (formData: FormData) => {
       product: prismaTx.product,
     };
   } catch (error) {
+    console.log('error :', error);
     return {
       ok: false,
       message: 'Hubo un error al crear o actualizar el producto',
