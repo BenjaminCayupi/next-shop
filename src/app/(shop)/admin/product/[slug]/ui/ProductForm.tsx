@@ -62,6 +62,8 @@ export const ProductForm = ({ product, categories }: Props) => {
   };
 
   const onSubmit = async (data: FormInputs) => {
+    const loader = toast.loading('Cargando...');
+
     const formData = new FormData();
 
     const { images, ...productToSave } = data;
@@ -91,6 +93,8 @@ export const ProductForm = ({ product, categories }: Props) => {
       message,
       product: updatedProduct,
     } = await createUpdateProduct(formData);
+
+    toast.remove(loader);
 
     if (!ok) {
       toast.error(message ?? 'Error');
