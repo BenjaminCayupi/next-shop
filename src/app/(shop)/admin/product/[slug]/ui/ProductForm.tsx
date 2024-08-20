@@ -1,7 +1,12 @@
 'use client';
 
 import { createUpdateProduct } from '@/actions';
-import { Product, Category, ProductImage } from '@/interfaces';
+import { ProductImage } from '@/components';
+import {
+  Product,
+  Category,
+  ProductImage as ProductImageInt,
+} from '@/interfaces';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -9,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 interface Props {
-  product: Partial<Product> & { ProductImage?: ProductImage[] };
+  product: Partial<Product> & { ProductImage?: ProductImageInt[] };
   categories: Category[];
 }
 
@@ -26,7 +31,7 @@ interface FormInputs {
   gender: 'men' | 'women' | 'kid' | 'unisex';
   categoryId: string;
 
-  //Todo: images
+  images?: FileList;
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
@@ -43,6 +48,7 @@ export const ProductForm = ({ product, categories }: Props) => {
       ...product,
       tags: product.tags?.join(', '),
       sizes: product.sizes ?? [],
+      images: undefined,
     },
   });
 
@@ -58,7 +64,7 @@ export const ProductForm = ({ product, categories }: Props) => {
   const onSubmit = async (data: FormInputs) => {
     const formData = new FormData();
 
-    const { ...productToSave } = data;
+    const { images, ...productToSave } = data;
 
     if (product.id) {
       formData.append('id', product.id ?? '');
@@ -73,6 +79,12 @@ export const ProductForm = ({ product, categories }: Props) => {
     formData.append('tags', productToSave.tags);
     formData.append('gender', productToSave.gender);
     formData.append('categoryId', productToSave.categoryId.toString());
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+      }
+    }
 
     const {
       ok,
@@ -219,14 +231,15 @@ export const ProductForm = ({ product, categories }: Props) => {
               type='file'
               multiple
               className='p-2 border rounded-md '
-              accept='image/png, image/jpeg'
+              accept='image/png, image/jpeg, image/avif'
+              {...register('images')}
             />
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4'>
               {product.ProductImage?.map((image) => (
                 <div key={image.id}>
-                  <Image
+                  <ProductImage
                     alt={product.title ?? ''}
-                    src={`/products/${image.url}`}
+                    src={image.url}
                     width={300}
                     height={300}
                     className='rounded-t shadow-md'
