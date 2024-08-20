@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { MouseEventHandler } from 'react';
 
 interface Props {
   src?: string;
@@ -7,6 +8,8 @@ interface Props {
   alt: string;
   className?: React.StyleHTMLAttributes<HTMLImageElement>['className'];
   style?: React.StyleHTMLAttributes<HTMLImageElement>['style'];
+  onMouseEnter?: MouseEventHandler<HTMLImageElement>;
+  onMouseLeave?: MouseEventHandler<HTMLImageElement>;
 }
 
 export const ProductImage = ({
@@ -16,6 +19,8 @@ export const ProductImage = ({
   alt,
   className,
   style,
+  onMouseEnter,
+  onMouseLeave,
 }: Props) => {
   const newSrc = src
     ? src.startsWith('http')
@@ -30,6 +35,8 @@ export const ProductImage = ({
       alt={alt}
       className={className ? className : 'rounded object-cover'}
       style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     />
   );
 };
