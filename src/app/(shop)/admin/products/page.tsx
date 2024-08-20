@@ -4,6 +4,7 @@ import { getPaginatedProductsWithImages } from '@/actions';
 import { Pagination, ProductImage, Title } from '@/components';
 
 import Link from 'next/link';
+import { RiPencilFill } from 'react-icons/ri';
 
 interface Props {
   searchParams: { page: string };
@@ -65,6 +66,12 @@ export default async function AdminProductsPage({ searchParams }: Props) {
               >
                 Tallas
               </th>
+              <th
+                scope='col'
+                className='text-sm font-medium text-gray-900 px-6 py-4'
+              >
+                Editar
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -99,6 +106,14 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                 </td>
                 <td className='text-sm text-gray-900 font-light px-6 '>
                   {product.sizes.join(', ')}
+                </td>
+                <td className='text-sm text-gray-900 font-light px-6'>
+                  <Link
+                    href={`/admin/product/${product.slug}`}
+                    className='flex w-full justify-center'
+                  >
+                    <RiPencilFill size={20} />
+                  </Link>
                 </td>
               </tr>
             ))}
